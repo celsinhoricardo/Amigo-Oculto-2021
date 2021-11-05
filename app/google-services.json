@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "988054939810",
+    "project_id": "amigosecreto2021-27a48",
+    "storage_bucket": "amigosecreto2021-27a48.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:988054939810:android:c0ee38d40966259f088ffb",
+        "android_client_info": {
+          "package_name": "com.celsinhoricardo.amigooculto2021"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "988054939810-rll72teqv6r7lq8pfnr9t7e7mo8famsm.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAldS6XR7B23FeW-ycxcBdgxM_8o7iE62w"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "988054939810-rll72teqv6r7lq8pfnr9t7e7mo8famsm.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
