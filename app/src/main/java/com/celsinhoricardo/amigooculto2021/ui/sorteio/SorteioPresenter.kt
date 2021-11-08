@@ -5,6 +5,7 @@ import android.os.Handler
 import android.provider.Settings
 import android.util.Base64
 import android.util.Log
+import com.celsinhoricardo.amigooculto2021.model.Info
 import com.celsinhoricardo.amigooculto2021.model.Usuario
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ktx.database
@@ -34,7 +35,6 @@ class SorteioPresenter(val context: Context, val view: SorteioContract.View) :
 
                         if (!myUser!!.amigo_secreto.isNullOrEmpty()) {
                             getAmigoSecreto(decodeString(myUser?.amigo_secreto!!))
-
                         } else {
                             view.bindTxtInfo("É hora de sortear o seu amigo secreto.\nClique no botão SORTEAR e revele seu amigo secreto.")
                             view.showSortButton()
@@ -56,15 +56,18 @@ class SorteioPresenter(val context: Context, val view: SorteioContract.View) :
     override fun getAwaitFlag() {
 
         database.child("sorteioLiberado").get().addOnSuccessListener {
-
             it?.let { it1 ->
-                val sorteioLiberado: Boolean = it1.getValue(Boolean::class.java)!!
-                if (sorteioLiberado) {
-                    getMyUser()
-                } else {
-                    view.hideMainProgressBar()
-                    view.showAwaitView()
+                val sorteioLiberado: Boolean? = it1.getValue(Boolean::class.java)
+                sorteioLiberado?.let { sorteioLiberado1 ->
+                    if (sorteioLiberado1) {
+                        getMyUser()
+                        getInfo()
+                    } else {
+                        view.hideMainProgressBar()
+                        view.showAwaitView()
+                    }
                 }
+
             }
         }.addOnFailureListener {
             view.hideMainProgressBar()
@@ -80,10 +83,13 @@ class SorteioPresenter(val context: Context, val view: SorteioContract.View) :
             database.child("Usuario").child(myUser?.nome!!).child("amigo_secreto")
                 .setValue(strEncrypt)
                 .addOnSuccessListener {
-                    view.hideProgressBar()
-                    view.hideSortButton()
-                    view.bindTxtInfo("O seu amigo oculto é:")
-                    view.showSortUser(usuario.nome!!)
+                    view.apply {
+                        hideProgressBar()
+                        hideSortButton()
+                        bindTxtInfo("O seu amigo oculto é:")
+                        bindSortUser(usuario.nome!!)
+                        showSortUser()
+                    }
                 }
                 .addOnFailureListener {
 
@@ -99,10 +105,11 @@ class SorteioPresenter(val context: Context, val view: SorteioContract.View) :
             val children = it?.children
             children?.forEach {
                 it.getValue(Usuario::class.java)?.let { user ->
-                    if(user.nome == nome){
+                    if (user.nome == nome) {
                         view.hideSortButton()
                         view.bindTxtInfo("O seu amigo secreto é:")
-                        view.showSortUser(user.nome!!)
+                        view.showSortUser()
+                        view.bindSortUser(user.nome!!)
 
                         user?.dicas?.let {
                             it.dica1?.let { dica1 -> view.bindDica1(dica1) }
@@ -116,6 +123,19 @@ class SorteioPresenter(val context: Context, val view: SorteioContract.View) :
                 }
 
             }
+        }.addOnFailureListener {
+        }
+    }
+
+    override fun getInfo() {
+        database.child("Info").get().addOnSuccessListener {
+            val info: Info? = it.getValue(Info::class.java)
+            info?.let { info1 ->
+                info1.dataRevelacao?.let { data -> view.bindData(data) }
+                info1.preco?.let { preco -> view.bindPreco(preco) }
+                info1.extra?.let { extra -> view.bindExtra(extra) }
+            }
+
         }.addOnFailureListener {
         }
     }

@@ -13,6 +13,7 @@ interface SorteioContract {
         fun getAwaitFlag()
         fun saveAmigoSecreto(usuario: Usuario)
         fun getAmigoSecreto(nome: String)
+        fun getInfo()
 
     }
     interface View {
@@ -26,17 +27,20 @@ interface SorteioContract {
         fun bindDicasTitle(nome: String)
         fun showSortButton()
         fun hideSortButton()
-        fun showSortUser(nomeSorteado: String)
+        fun bindSortUser(nomeSorteado: String)
+        fun showSortUser()
+        fun hideSortUser()
         fun bindMyName(name: String)
         fun showError()
-        fun showName()
-        fun hideName()
         fun bindTxtInfo(text : String)
         fun configBtnReveal()
         fun showProgressBar()
         fun hideProgressBar()
         fun showMainProgressBar()
         fun hideMainProgressBar()
+        fun bindData(data: String)
+        fun bindPreco(preco: String)
+        fun bindExtra(extra: String)
     }
 
 }

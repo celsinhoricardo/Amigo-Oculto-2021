@@ -23,6 +23,11 @@ class SorteioActivity : AppCompatActivity(), SorteioContract.View {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_sorteio)
         presenter = SorteioPresenter(this, this)
         configBtnReveal()
+        binding.swiperefresh.setOnRefreshListener {
+            binding.llmain.visibility = View.GONE
+            presenter = SorteioPresenter(this, this)
+            binding.swiperefresh.isRefreshing = false
+        }
         setSupportActionBar(binding.toolbar)
 
     }
@@ -38,6 +43,16 @@ class SorteioActivity : AppCompatActivity(), SorteioContract.View {
         binding.txtDica3.setText(dica3)
     }
 
+    override fun bindData(data: String) {
+        binding.dataRevelacao.text = data
+    }
+
+    override fun bindPreco(preco: String) {
+        binding.precoSugerido.text = preco
+    }
+    override fun bindExtra(extra: String) {
+        binding.extraText.text = extra
+    }
     override fun showAwaitView() {
         val alertDialog: AlertDialog? = this@SorteioActivity?.let {
             val builder = AlertDialog.Builder(it)
@@ -83,8 +98,7 @@ class SorteioActivity : AppCompatActivity(), SorteioContract.View {
         binding.welcomeText.text = "Olá $name,"
     }
 
-    override fun showSortUser(nomeSorteado: String) {
-        binding.nomeSorteado.visibility = View.VISIBLE
+    override fun bindSortUser(nomeSorteado: String) {
         binding.nomeSorteado.text = nomeSorteado
     }
 
@@ -108,23 +122,24 @@ class SorteioActivity : AppCompatActivity(), SorteioContract.View {
     override fun configBtnReveal() {
         val btnReveal = binding.btnReveal
         val nomeSorteado = binding.nomeSorteado
+
         btnReveal.setOnClickListener {
             if (nomeSorteado.visibility == View.VISIBLE) {
                 btnReveal.setImageResource(R.drawable.eye)
-                nomeSorteado.visibility = View.INVISIBLE
+                hideSortUser()
             } else {
                 btnReveal.setImageResource(R.drawable.eye_off)
-                nomeSorteado.visibility = View.VISIBLE
+                showSortUser()
             }
         }
 
     }
 
-    override fun showName() {
+    override fun showSortUser() {
         binding.nomeSorteado.visibility = View.VISIBLE
     }
 
-    override fun hideName() {
+    override fun hideSortUser() {
         binding.nomeSorteado.visibility = View.INVISIBLE
     }
 
